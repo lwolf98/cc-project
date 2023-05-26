@@ -1,0 +1,17 @@
+int n;
+println("Enter a number n for fib(n)");
+n = str_to_dec(readln());
+function fib: (int) -> (int);
+fib { int a } = {
+	int res;
+	<if:a > 2:{res = fib(a - 1) + fib(a - 2);}:
+	else:{
+		<if:a == 2 || a == 1:{ res = 1;}:
+		else:{res = 0;}:>
+	}:>
+	return res;
+};
+int res;
+res = fib(n);
+println("fib(" + n + ") = " + res);
+

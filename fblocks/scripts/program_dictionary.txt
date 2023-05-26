@@ -1,0 +1,64 @@
+function set_score: (list, int, string, int, bool) -> ();
+set_score {list dict, int id, string name, int score, bool validated} = {
+	list entry;
+	entry = <list::>;
+	list_add(entry, id);		// index 0
+	list_add(entry, name);		// index 1
+	list_add(entry, score);		// index 2
+	list_add(entry, validated);	// index 3
+	list_add(dict, entry);
+};
+
+function get_score: (list, int, variant) -> (int, string, int, bool);
+get_score {list dict, int key_index, variant key} = {
+	list result;
+	result = <list:-1, "", 0, false:>;
+	int i;
+	i = 0;
+	<loop:{
+		<if:key == list_get(list_get(dict, i),key_index):{
+			result = list_get(dict, i);
+			break;
+		}:>
+
+		i = i + 1;
+		<if:i >= list_size(dict):{break;}:>
+	}:>
+
+	return {list_get(result, 0), list_get(result, 1), list_get(result, 2), list_get(result, 3)};
+	//return {list_get(result, 0), 3333, list_get(result, 2), list_get(result, 3)};
+};
+
+list scores;
+scores = <list::>;
+set_score(scores, 1, "Peter", 100, true);
+set_score(scores, 2, "Lukas", 110, true);
+set_score(scores, 3, "Klaus", 130, false);
+set_score(scores, 4, "Hans", 80, true);
+println(scores);
+
+println("Enter a column number to compare: (0) int id, (1) string name, (2) int score, (3) bool validated");
+int column;
+column = str_to_dec(readln());
+
+println("Enter a key");
+variant r_key;
+<if:column == 1:{
+	r_key = readln();
+}:>
+<if:column == 0 || column == 2:{
+	r_key = str_to_dec(readln());
+}:>
+<if:column == 3:{
+	r_key = str_to_bool(readln());
+}:>
+
+{int r_id, string r_name, int r_score, bool r_validated} = get_score(scores, column, r_key);
+
+<if:r_validated == true:{
+	println("Score: " + r_score + " (" + r_name + ")");
+}:
+else:{
+	println("Score not validated...");
+}:>
+

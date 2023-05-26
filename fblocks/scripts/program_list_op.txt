@@ -1,0 +1,22 @@
+<list:1:> == <list:1:>;
+
+println("List compare: " + (<list:1:> == <list:1:>));
+
+println("List compare: " + (<list:1,<list:"abc",true:>:> == <list:1,<list:"abc",true:>:>));
+
+println("List plus: " + (<list:1,<list:"abc",true:>:> + <list:"xyz":>));
+
+list a;
+a = <list::>;
+list b;
+b = a;
+list_add(b, "abc");
+println("b: " + b);
+println("a: " + a);
+list z;
+z = <list::>;
+
+println("shift: " + (a >> <list:"zzzzz":> >> <list:"ghi":> >> z));
+
+println("z: " + z);
+

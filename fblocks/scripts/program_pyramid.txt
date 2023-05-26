@@ -1,0 +1,29 @@
+int size;
+println("Enter tree size:");
+size = str_to_dec(readln());
+println("Size: " + size);
+int i;
+i = 0;
+
+function printloop: (int, string) -> ();
+printloop { int n, string txt } = {
+	string res;
+	res = "";
+	int j;
+	j = 1;
+	<loop:{
+		print(txt);
+		<if:j >= n:{break;}:>
+		j = j + 1;
+	}:>
+};
+
+<loop:{
+	printloop(size - i, "  ");
+	printloop(2 * i + 1, "AA");
+	print("<NEW>");
+
+	<if:i >= size - 1:{break;}:>
+	i = i + 1;
+}:>
+

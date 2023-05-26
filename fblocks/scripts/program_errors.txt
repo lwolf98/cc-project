@@ -1,0 +1,97 @@
+3 + 5 > 10;
+2 + 3 * 4;
+3 * 4 + 2;
+
+int i;
+i = 3;
+//3 + i;
+
+println(2 < 5 && 3 >= 3 && true);
+println(2 < 5 && 3 >= 3 && !true);
+
+i = 1;
+i < 3;
+i = i + 1;
+i < 3;
+i = i + 1;
+i < 3;
+i = i + 1;
+i < 3;
+i = i + 1;
+
+bool tf;
+tf = false;
+println("TF: " + tf);
+tf = !tf;
+println("!TF: " + tf);
+
+println("Number: " + <HEX:-ABC>);
+println("Binary: " + <BIN:-1001>);
+println("Binary: " + (<HEX:-ABC> + <BIN:-1001>));
+println("Binary: " + (<HEX:-ABC> + -<BIN:1001>));
+println("Binary: " + <HEX:-ABC> + <BIN:-1001>);
+
+variant v;
+v = "abc";
+println(v + "def");
+v = 4444;
+println(v + "def");
+
+//-----------------
+
+println("Minus test");
+println("Bin SP: " + (3 - 4));
+println("Bin: " + (3-4));
+println("Un SP: " + (- 4));
+println("Un: " + (-4));
+println("Un no br: " + -4);
+
+int a b;
+int i;
+i = 3;
+i = "abc";
+new_fnct();
+
+<if:"abc":{}:>
+
+str_to_dec(3);
+readln(i);
+
+function f: (string) -> (int);
+f { string s } = {
+	println("String: " + s);
+	return 1;
+};
+f("abc");
+f(123);
+f();
+f("abc", "def");
+
+f = {};
+
+//-----------------------
+
+"abc" - "def";
+-4;
+i = -Q;
+println(-Q);
+!"xyz";
+println("TEST");
+
+
+bool tf;
+tf = true;
+tf = {"abc";};
+
+
+variant var;
+var = "abc";
+var = 234;
+
+println("var: " + var);
+
+
+
+
+
+

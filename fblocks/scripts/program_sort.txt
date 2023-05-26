@@ -1,0 +1,42 @@
+
+function bubble_sort: (list) -> ();
+bubble_sort { list arr } = {
+	println("called bubble sort");
+	int n;
+	n = list_size(arr);
+	int i; int j; int tmp;
+	i = 0;
+	<loop:{
+		<if:i >= n:{break;}:>
+		j = 0;
+		<loop:{
+			<if: list_get(arr, j) > list_get(arr, j+1):{
+				tmp = list_get(arr, j);
+				list_set(arr, j, list_get(arr, j+1));
+				list_set(arr, j+1, tmp);
+				
+				println(arr);
+			}:>
+
+			j = j + 1;
+			<if:j >= n - i - 1:{break;}:>
+		}:>
+		i = i + 1;
+	}:>
+};
+
+list items;
+//items = <list:3,9,5,2,-7,10,0,4,8,1,6:>;
+items = <list::>;
+<loop:{
+	int aaa;
+	aaa = str_to_dec(readln());
+	<if:aaa == -1:{break;}:>
+	list_add(items, aaa);
+}:>
+println("Unsorted list:<NEW>" + items);
+
+bubble_sort(items);
+
+println("Sorted list:");
+println(items);

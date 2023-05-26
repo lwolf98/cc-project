@@ -1,3 +1,16 @@
+# VS Code
+.vscode/
+
+# Output / Generated files
+*.svg
+*.gv
+*.dot
+lang
+*.yy.c
+*.tab.c
+*.tab.h
+*.output
+
 # Prerequisites
 *.d
 

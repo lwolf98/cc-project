@@ -1,0 +1,12 @@
+string name;
+println("Enter name:");
+name = readln();
+
+int i;
+i = 1;
+<loop:{
+	<if:i > 10:{break;}:>
+	println("Hello " + name + ", Loop " + i);
+	i = i + 1;
+}:>
+
