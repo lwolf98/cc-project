@@ -55,7 +55,7 @@ void debug_print_term(const char *msg, const value_t a, const value_t b, const i
 }
 
 void debug_traverse_ast(astnode_t *a) {
-	ast_iterator it;
+	ast_iterator_t it;
 	init_ast_iterator(&it, a);
 	while (!it.finished) {
 		astnode_t *node = it.next(&it);

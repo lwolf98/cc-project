@@ -153,7 +153,7 @@ value_t evaluate_term(value_t a, value_t b, int op) {
 }
 
 list_t *evaluate_term_list(astnode_t *value_list) {
-	ast_iterator it_value;
+	ast_iterator_t it_value;
 	init_ast_iterator(&it_value, value_list);
 	astnode_t *node;
 	list_t *values = list_new();
@@ -169,7 +169,7 @@ list_t *evaluate_term_list(astnode_t *value_list) {
 	}
 
 	for (int i = 0; i < values->size; i++)
-		debug_print("value index %d (%d)\n", i, values->get(values, i).type);
+		debug_print("evaluate term list: value index %d (type: %s)\n", i, data_type_to_str(values->get(values, i).type));
 
 	return values;
 }
@@ -424,7 +424,7 @@ void exit_block() {
 
 int assign_fnct_params(astnode_t *id_list, list_t *params) {
 	int params_size = params->size;
-	ast_iterator it_id;
+	ast_iterator_t it_id;
 	init_ast_iterator(&it_id, id_list);
 	astnode_t *id_node;
 	int index = 0;
@@ -441,7 +441,6 @@ int assign_fnct_params(astnode_t *id_list, list_t *params) {
 		char *id = id_node->child[1]->val.str;
 		value_t value = params->arr[index++];
 
-		//DEBUG:
 		debug_print("Assign: %s = %s\n", id_node->child[1]->to_str(id_node->child[1]), value_to_str(&value));
 		
 		int err = set_id(id, value);

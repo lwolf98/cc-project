@@ -17,7 +17,7 @@ void ast_set_child(astnode_t *s, int index, astnode_t *child) {
 		child->parent = s;
 }
 
-char *ast_to_str(astnode_t *s) {
+char *ast_to_str(const astnode_t *s) {
 	string buf;
 	init_string(&buf);
 	if (debug_id() || debug_line()) {
@@ -34,26 +34,26 @@ char *ast_to_str(astnode_t *s) {
 	}
 
 	buf.append(&buf, node_type_to_str(s->val.type));
+	if (s->val.type == type_void)
+		return buf.get(&buf);
+
+	char *val = NULL;
 	switch (s->val.type) {	
-		case _type:			buf.append(&buf, ": ");
-							buf.append(&buf, data_type_to_str(s->val.dec));
+		case _type:			val = data_type_to_str(s->val.dec);
 							break;
-		case _id:			buf.append(&buf, ": ");
-							buf.append(&buf, s->val.str);
+		case lib_fnct:		val = lib_f_to_str(s->val.dec);
 							break;
-		case 'F':			buf.append(&buf, ": ");
-							buf.append(&buf, s->val.str);
+		case _id:			
+		case 'F':			
+		case type_string:	val = s->val.str;
 							break;
-		case type_string:	buf.append(&buf, ": ");
-							buf.append(&buf, s->val.str);
+		case type_decimal:	val = dec_to_str(s->val.dec);
 							break;
-		case type_decimal:	buf.append(&buf, ": ");
-							buf.append(&buf, dec_to_str(s->val.dec));
-							break;
-		case type_boolean:	buf.append(&buf, ": ");
-							buf.append(&buf, bool_to_str(s->val.bool));
+		case type_boolean:	val = bool_to_str(s->val.bool);
 							break;
 	}
+
+	if (val) buf.append(&buf, ": ")->append(&buf, val);
 	
 	return buf.get(&buf);
 }
@@ -125,7 +125,7 @@ int check_f_call(const astnode_t *node, const char *f_name, int param_size, int 
 }
 
 int check_f_params(astnode_t *type_list, astnode_t *id_list) {
-	ast_iterator type_it, id_it;
+	ast_iterator_t type_it, id_it;
 	init_ast_iterator(&type_it, type_list);
 	init_ast_iterator(&id_it, id_list);
 	astnode_t *type_node, *id_node;
@@ -329,7 +329,6 @@ value_t ast_execute(astnode_t *s) {
 		value_t op = f_val.fnct->child[3]->execute(f_val.fnct->child[3]);
 
 		debug_print_stacks("BEFORE EXIT");
-		//vars->pop_to_index(vars, stack_index);
 		exit_function();
 		debug_print_stacks("EXIT FNCT");
 
@@ -359,7 +358,6 @@ value_t ast_execute(astnode_t *s) {
 
 		// search function ID:
 		astnode_t *node = s;
-		//value_t empty_return = { .type = type_void };
 		while (node->val.type != 'F') {
 			node = node->parent;
 			if (node == NULL) {
@@ -475,7 +473,7 @@ value_t ast_execute(astnode_t *s) {
 				return eval_val;
 
 			// Evaluate list entries (if there are any)
-			ast_iterator it;
+			ast_iterator_t it;
 			init_ast_iterator(&it, s->child[0]);
 			astnode_t *node = NULL;
 			while (1) {
@@ -521,7 +519,6 @@ astnode_t *astnode_new(int type, int line) {
 	a->execute = ast_execute;
 	a->to_str = ast_to_str;
 	a->category = ast_category;
-	//a->has_children = ast_has_children;
 	a->index_of = ast_index_of;
 	return a;
 }
@@ -532,7 +529,7 @@ astnode_t *astnode_new(int type, int line) {
 int ast_of_type(astnode_t *a, value_t val)		{ return a->val.type == val.type; }
 int ast_not_of_type(astnode_t *a, value_t val)	{ return a->val.type != val.type; }
 
-astnode_t *ast_it_next(ast_iterator *s) {
+astnode_t *ast_it_next(ast_iterator_t *s) {
 	if (s->finished)		return NULL;
 	if (s->current == NULL) {
 		s->current = s->root;
@@ -545,7 +542,6 @@ astnode_t *ast_it_next(ast_iterator *s) {
 		if (child != NULL) {
 			s->current = child;
 			s->child_index = 0;
-			//s->child_index++;
 			return child;
 		}
 	}
@@ -565,7 +561,7 @@ astnode_t *ast_it_next(ast_iterator *s) {
 	return NULL;
 }
 
-astnode_t *ast_it_next_specific_node(ast_iterator *s, int (*predicate)(astnode_t *, value_t), value_t val) {
+astnode_t *ast_it_next_specific_node(ast_iterator_t *s, int (*predicate)(astnode_t *, value_t), value_t val) {
 	astnode_t *node = NULL;
 	do {
 		node = s->next(s);
@@ -577,15 +573,15 @@ astnode_t *ast_it_next_specific_node(ast_iterator *s, int (*predicate)(astnode_t
 	return node;
 }
 
-void ast_it_skip_next_child(ast_iterator *s) {
+void ast_it_skip_next_child(ast_iterator_t *s) {
 	s->child_index++;
 }
 
-void ast_it_reset(ast_iterator *s) {
+void ast_it_reset(ast_iterator_t *s) {
 	init_ast_iterator(s, s->root);
 }
 
-void init_ast_iterator(ast_iterator *it, astnode_t *root) {
+void init_ast_iterator(ast_iterator_t *it, astnode_t *root) {
 	it->root = root;
 	it->current = NULL;
 	it->child_index = 0;

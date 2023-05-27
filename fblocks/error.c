@@ -4,7 +4,7 @@
 #include "error.h"
 #include "evaluation.h"
 
-static int exit_on_error = 1;	// Default behavior, whether to exit the program or not in an error case
+static int exit_on_error = 0;	// Default behavior, whether to exit the program or not in an error case
 
 int set_exit_on_error(int exit) {
 	int prev_value = exit_on_error;
@@ -41,7 +41,7 @@ void error_print_ast(const astnode_t *node, const char *msg, ...) {
 	va_list args;
 	va_start(args, msg);
 	vsnprintf(msg_buf, sizeof(msg_buf), msg, args);
-	fprintf(stderr, "ERR: Line: %d, AST: [%s]:\n\t%s\n\n", node->line, node_type_to_str(node->val.type), msg_buf);
+	fprintf(stderr, "ERR: Line: %d, AST: [%s](ID: %d):\n\t%s\n\n", node->line, node_type_to_str(node->val.type), node->id, msg_buf);
 	va_end(args);
 
 	if (exit_on_error)

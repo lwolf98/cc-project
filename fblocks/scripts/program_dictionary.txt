@@ -26,7 +26,6 @@ get_score {list dict, int key_index, variant key} = {
 	}:>
 
 	return {list_get(result, 0), list_get(result, 1), list_get(result, 2), list_get(result, 3)};
-	//return {list_get(result, 0), 3333, list_get(result, 2), list_get(result, 3)};
 };
 
 list scores;

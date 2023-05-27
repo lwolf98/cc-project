@@ -1,0 +1,8 @@
+int n;
+println("Enter a number:");
+n = str_to_dec(readln());
+
+<if:n > 10:{
+	println(n + " is greater 10");
+}:>
+

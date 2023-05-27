@@ -89,7 +89,6 @@ void s_pop_to_index(stack_t *s, int index) {
 
 void s_exit_scope(stack_t *s, int scope_type) {
 	val_t v;
-	//while ((v = s->pop(s)).val.type != scope_type && s->index > 0);
 	do {
 		v = s->pop(s);
 	} while (v.val.type != scope_type && s->index > -1);

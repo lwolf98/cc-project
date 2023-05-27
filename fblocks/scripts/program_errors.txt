@@ -4,7 +4,7 @@
 
 int i;
 i = 3;
-//3 + i;
+3 + i;
 
 println(2 < 5 && 3 >= 3 && true);
 println(2 < 5 && 3 >= 3 && !true);

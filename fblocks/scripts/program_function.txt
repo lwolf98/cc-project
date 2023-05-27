@@ -1,0 +1,13 @@
+function echo_text: (string) -> (int);
+echo_text { string s } = {
+	println("Echo: " + s);
+	return 1;
+};
+echo_text("Hallo");
+
+function str_concat: (string, string) -> (string);
+str_concat { string a, string b } = {
+	println("strcat called");
+	return a + b;
+};
+str_concat("Hello ", "World");

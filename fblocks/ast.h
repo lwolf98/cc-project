@@ -44,7 +44,7 @@ struct astnode {
 	void (*set_child)(struct astnode *, int, struct astnode *);
 	void (*print)(struct astnode *);
 	value_t (*execute)(struct astnode *);
-	char * (*to_str)(struct astnode *);
+	char * (*to_str)(const struct astnode *);
 	int (*category)(struct astnode *);
 	int (*index_of)(struct astnode *, struct astnode *child);
 };
@@ -68,6 +68,6 @@ typedef struct ast_it {
 	astnode_t * (*next_specific_node)(struct ast_it *s, int (*predicate)(astnode_t *, value_t), value_t);
 	void (*skip_next_child)(struct ast_it *s);
 	void (*reset)(struct ast_it *);
-} ast_iterator;
+} ast_iterator_t;
 
-void init_ast_iterator(ast_iterator *it, astnode_t *root);
+void init_ast_iterator(ast_iterator_t *it, astnode_t *root);
