@@ -1,22 +1,24 @@
 %{
-#include <stdio.h>
-#include "global.h"
-#include "strop.h"
-#include "stack.h"
+	#include <stdio.h>
+	#include <stdlib.h>
+	#include "global.h"
+	#include "strop.h"
+	#include "stack.h"
 
-stack_t *vars, *vars_global;
+	stack_t *vars, *vars_global;
 
-int yylex(void);
-extern string buffer;
-extern int yylineno;
-extern FILE *yyin;
+	int yylex(void);
+	extern string buffer;
+	extern int yylineno;
+	extern FILE *yyin;
 
-int yydebug = 1;
-void yyerror (const char *msg) {
-	//printf("Error triggered:\n");
-	//fprintf(stderr, "Error in line %d:\n%s\n", yylineno, msg);
-	error_print(yylineno, msg);
-}
+	int yydebug = 1;
+	void yyerror (const char *msg) {
+		// Do not exit program on syntax errors
+		int prev_exit = set_exit_on_error(0);
+		error_print(yylineno, msg);
+		set_exit_on_error(prev_exit);
+	}
 %}
 
 %define parse.error verbose
@@ -49,7 +51,13 @@ void yyerror (const char *msg) {
 
 %%
 
-START:		STATEMENT_LIST			{ $1->print($1); $1->execute($1); dbg_strop(); }
+START:		STATEMENT_LIST			{
+										if ($1) {
+											$1->print($1);
+											$1->execute($1);
+										}
+										dbg_strop();
+									}
 
 STATEMENT_LIST:	STATEMENT_LIST STATEMENT	{ $$ = astnode_new(stmt_list, yylineno); $$->set_child($$, 0, $1); $$->set_child($$, 1, $2); }
 			|	/* epsilon */				{ $$ = NULL; }
@@ -145,11 +153,15 @@ TERM_WRAPPER:	TERM						{ $$ = astnode_new(_term, yylineno); $$->set_child($$, 0
 
 int main (int argc, char *argv[]) {
 	if (argc > 2) {
-		printf("too many arguments\n");
-		return 0;
+		printf("Wrong usage: too many arguments, pass one script file\n");
+		return EXIT_FAILURE;
 	}
 	if (argc == 2) {
 		yyin = fopen(argv[1], "r");
+		if (yyin == NULL) {
+			printf("Could not open file: %s\n", argv[1]);
+			return EXIT_FAILURE;
+		}
 	}
 	vars = s_new();
 	vars_global = s_new();

@@ -492,6 +492,10 @@ value_t ast_execute(astnode_t *s) {
 		return eval_val;
 	}
 
+	if (s->val.type == error_type) {
+		error_print_ast(s, "Could not execute statement, syntax error (see information above)");
+	}
+
 	// Case else (statements)
 	for (int i = 0; i < MAX_CHILDREN; i++) {
 		if (s->child[i]) {

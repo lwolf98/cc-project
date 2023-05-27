@@ -28,6 +28,7 @@ bubble_sort { list arr } = {
 list items;
 //items = <list:3,9,5,2,-7,10,0,4,8,1,6:>;
 items = <list::>;
+println("Enter numbers to sort, -1 will terminate the input:");
 <loop:{
 	int aaa;
 	aaa = str_to_dec(readln());

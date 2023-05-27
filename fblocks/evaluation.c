@@ -9,6 +9,9 @@
 
 extern stack_t *vars, *vars_global;
 
+
+/* term evaluation*/
+
 typedef struct {
 	int type_a;
 	int type_b;
@@ -113,6 +116,67 @@ operation_t *get_operation(int type_a, int type_b, int type_op) {
 	return NULL;
 }
 
+void convert_types(value_t *main, value_t *to_convert) {
+	if (main->type == to_convert->type)
+		return;
+
+	int convert_from = to_convert->type;
+	switch (main->type) {
+		case type_string:	to_convert->str = value_to_str(to_convert);
+							to_convert->type = type_string;
+							return;
+
+		case type_decimal:	to_convert->type = type_decimal;
+							if (convert_from == type_boolean)
+								to_convert->dec = to_convert->bool;
+
+							return;
+
+		case type_boolean:	// nothing to convert
+							return;
+	}
+}
+
+value_t evaluate_term(value_t a, value_t b, int op) {
+	operation_t *operation = get_operation(a.type, b.type, op);
+	if (operation) return operation->exec(a, b);
+	
+	// if operation not found: try implicit type conversion
+	if (a.type > b.type)	convert_types(&a, &b);
+	else					convert_types(&b, &a);
+
+	operation = get_operation(a.type, b.type, op);
+	if (operation) return operation->exec(a, b);
+
+	// if still not found: return void
+	return (value_t) { .type = type_void };
+}
+
+list_t *evaluate_term_list(astnode_t *value_list) {
+	ast_iterator it_value;
+	init_ast_iterator(&it_value, value_list);
+	astnode_t *node;
+	list_t *values = list_new();
+
+	while (1) {
+		node = it_value.next_specific_node(&it_value, ast_of_type, (value_t) { .type = _term });
+		if (node == NULL)
+			break;
+
+		value_t value = node->execute(node);
+		it_value.skip_next_child(&it_value);
+		values->add(values, value);
+	}
+
+	for (int i = 0; i < values->size; i++)
+		debug_print("value index %d (%d)\n", i, values->get(values, i).type);
+
+	return values;
+}
+
+
+/* type conversion */
+
 int no_of_digits(int i) {
 	if (i < 0)
 		return no_of_digits(i * -1) + 1;
@@ -149,41 +213,8 @@ int str_to_dec(char *val) {
 	return atoi(val);
 }
 
-void convert_types(value_t *main, value_t *to_convert) {
-	if (main->type == to_convert->type)
-		return;
 
-	int convert_from = to_convert->type;
-	switch (main->type) {
-		case type_string:	to_convert->str = value_to_str(to_convert);
-							to_convert->type = type_string;
-							return;
-
-		case type_decimal:	to_convert->type = type_decimal;
-							if (convert_from == type_boolean)
-								to_convert->dec = to_convert->bool;
-
-							return;
-
-		case type_boolean:	// nothing to convert
-							return;
-	}
-}
-
-value_t evaluate_term(value_t a, value_t b, int op) {
-	operation_t *operation = get_operation(a.type, b.type, op);
-	if (operation) return operation->exec(a, b);
-	
-	// if operation not found: try implicit type conversion
-	if (a.type > b.type)	convert_types(&a, &b);
-	else					convert_types(&b, &a);
-
-	operation = get_operation(a.type, b.type, op);
-	if (operation) return operation->exec(a, b);
-
-	// if still not found: return void
-	return (value_t) { .type = type_void };
-}
+/* to string */
 
 char *operator_to_str(int op) {
 	if (op == plus) return "+";
@@ -314,7 +345,8 @@ char *lib_f_to_str(int type) {
 	}
 }
 
-/* ID handling */
+
+/* ID / stack handling */
 
 int has_local_scope() {
 	return vars->index >= 0;
@@ -390,28 +422,6 @@ void exit_block() {
 	vars->exit_scope(vars, weak_border);
 }
 
-list_t *evaluate_term_list(astnode_t *value_list) {
-	ast_iterator it_value;
-	init_ast_iterator(&it_value, value_list);
-	astnode_t *node;
-	list_t *values = list_new();
-
-	while (1) {
-		node = it_value.next_specific_node(&it_value, ast_of_type, (value_t) { .type = _term });
-		if (node == NULL)
-			break;
-
-		value_t value = node->execute(node);
-		it_value.skip_next_child(&it_value);
-		values->add(values, value);
-	}
-
-	for (int i = 0; i < values->size; i++)
-		debug_print("value index %d (%d)\n", i, values->get(values, i).type);
-
-	return values;
-}
-
 int assign_fnct_params(astnode_t *id_list, list_t *params) {
 	int params_size = params->size;
 	ast_iterator it_id;
@@ -424,7 +434,7 @@ int assign_fnct_params(astnode_t *id_list, list_t *params) {
 		if (id_node == NULL)
 			break;
 		if (index >= params_size) {
-			//printf("Error in assign fnct params: too few arguments\n");
+			//Error in assign fnct params: too few arguments
 			return err_wrong_args_number;
 		}
 
@@ -439,10 +449,9 @@ int assign_fnct_params(astnode_t *id_list, list_t *params) {
 	}
 
 	if (index < params_size) {
-		//printf("Error in assign fnct params: too many arguments\n");
+		//Error in assign fnct params: too many arguments
 		return err_wrong_args_number;
 	}
-
 
 	return 0;
 }

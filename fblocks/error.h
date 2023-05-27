@@ -9,6 +9,7 @@ enum err_types {
 	err_wrong_args_number
 };
 
+int set_exit_on_error(int exit);
 void error_print(int line, const char *msg, ...);
 void error_print_type(int line, const char *type, const char *msg, ...);
 void error_print_ast(const astnode_t *node, const char *msg, ...);

@@ -49,11 +49,14 @@ struct astnode {
 	int (*index_of)(struct astnode *, struct astnode *child);
 };
 
+astnode_t *astnode_new(int type, int line);
+
+
+/* AST iterator */
+
 // predicate functions (for astnode.next_specific_node)
 int ast_of_type(astnode_t *a, value_t val);
 int ast_not_of_type(astnode_t *a, value_t val);
-
-astnode_t *astnode_new(int type, int line);
 
 typedef struct ast_it {
 	astnode_t *root;
