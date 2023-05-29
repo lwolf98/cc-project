@@ -4,7 +4,7 @@
 #include "error.h"
 #include "evaluation.h"
 
-static int exit_on_error = 0;	// Default behavior, whether to exit the program or not in an error case
+static int exit_on_error = 1;	// Default behavior, whether to exit the program or not in an error case
 
 int set_exit_on_error(int exit) {
 	int prev_value = exit_on_error;

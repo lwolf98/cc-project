@@ -1,3 +1,5 @@
+/* Printing a pyramid based on an user specified size */
+
 int size;
 println("Enter tree size:");
 size = str_to_dec(readln());

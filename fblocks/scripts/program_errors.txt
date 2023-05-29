@@ -1,50 +1,10 @@
-3 + 5 > 10;
-2 + 3 * 4;
-3 * 4 + 2;
-
-int i;
-i = 3;
-3 + i;
-
-println(2 < 5 && 3 >= 3 && true);
-println(2 < 5 && 3 >= 3 && !true);
-
-i = 1;
-i < 3;
-i = i + 1;
-i < 3;
-i = i + 1;
-i < 3;
-i = i + 1;
-i < 3;
-i = i + 1;
-
-bool tf;
-tf = false;
-println("TF: " + tf);
-tf = !tf;
-println("!TF: " + tf);
-
-println("Number: " + <HEX:-ABC>);
-println("Binary: " + <BIN:-1001>);
-println("Binary: " + (<HEX:-ABC> + <BIN:-1001>));
-println("Binary: " + (<HEX:-ABC> + -<BIN:1001>));
-println("Binary: " + <HEX:-ABC> + <BIN:-1001>);
-
-variant v;
-v = "abc";
-println(v + "def");
-v = 4444;
-println(v + "def");
-
-//-----------------
-
-println("Minus test");
-println("Bin SP: " + (3 - 4));
-println("Bin: " + (3-4));
-println("Un SP: " + (- 4));
-println("Un: " + (-4));
-println("Un no br: " + -4);
+/*
+	Error handling demonstration:
+	This script contains multiple errors of different kind.
+	
+	Disable the exit on error functionality in error.c and execute the script
+	to see a list of the error messages.
+*/
 
 int a b;
 int i;

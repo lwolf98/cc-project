@@ -1,3 +1,8 @@
+/*
+	Demonstration of the bubble sort algorithm.
+	The user enters a sequence of numbers that will then be sorted.
+	The end of the list is specified by entering the number -1.
+*/
 
 function bubble_sort: (list) -> ();
 bubble_sort { list arr } = {
@@ -15,7 +20,8 @@ bubble_sort { list arr } = {
 				list_set(arr, j, list_get(arr, j+1));
 				list_set(arr, j+1, tmp);
 				
-				println(arr);
+				//Uncomment this line to see the sort history:
+				//println(arr);
 			}:>
 
 			j = j + 1;

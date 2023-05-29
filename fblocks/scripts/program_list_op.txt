@@ -1,8 +1,8 @@
-<list:1:> == <list:1:>;
+/* Demonstration of the list operations equal (==), merge (+), include list (shift) (<<, >>) */
 
-println("List compare: " + (<list:1:> == <list:1:>));
-
-println("List compare: " + (<list:1,<list:"abc",true:>:> == <list:1,<list:"abc",true:>:>));
+println("List compare: " + (<list:1:> == <list:1:>)); //true
+println("List compare: " + (<list:1,<list:"abc",true:>:> == <list:1,<list:"abc",true:>:>)); //true
+println("List compare: " + (<list:1:> == <list:1,"abc":>)); //false
 
 println("List plus: " + (<list:1,<list:"abc",true:>:> + <list:"xyz":>));
 

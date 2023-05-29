@@ -1,3 +1,5 @@
+/* Recursively calculate the faculty of a number entered by the user */
+
 int n;
 println("Enter a number n for fac(n)");
 n = str_to_dec(readln());

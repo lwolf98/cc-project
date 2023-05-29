@@ -1,11 +1,25 @@
+/*
+	This script demonstrates the usage of the variant type and multiple return values.
+	A list of highscore entries of a game is simulated.
+	A user can query the scores list with the get_score function.
+	In an input promt the user specifies first the column to evaluate.
+	E. g. to query the score of the player Hans, first enter 1 to specify the name column.
+	Then enter "Hans".
+	By the usage of the variant type the same function can be used
+	for querying columns with different data types.
+	
+	The selected set is returned by using multiple return values.
+	This allows a direct assignment to the result variables instead of returning a list.
+*/
+
 function set_score: (list, int, string, int, bool) -> ();
 set_score {list dict, int id, string name, int score, bool validated} = {
 	list entry;
 	entry = <list::>;
-	list_add(entry, id);		// index 0
-	list_add(entry, name);		// index 1
-	list_add(entry, score);		// index 2
-	list_add(entry, validated);	// index 3
+	list_add(entry, id);		// column index 0
+	list_add(entry, name);		// column index 1
+	list_add(entry, score);		// column index 2
+	list_add(entry, validated);	// column index 3
 	list_add(dict, entry);
 };
 

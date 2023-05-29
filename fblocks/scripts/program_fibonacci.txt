@@ -1,3 +1,10 @@
+/*
+	Recursively calculate the fibonacci of a number entered by the user.
+	
+	Enable the debug_stack option in debug.c
+*/
+
+
 int n;
 println("Enter a number n for fib(n)");
 n = str_to_dec(readln());
