@@ -22,7 +22,7 @@ printloop { int n, string txt } = {
 
 <loop:{
 	printloop(size - i, "  ");
-	printloop(2 * i + 1, "AA");
+	printloop(2 * i + 1, "AA"); // The repeating string can be set to one or multiple characters. The number of spaces should be updated accordingly.
 	print("<NEW>");
 
 	<if:i >= size - 1:{break;}:>
