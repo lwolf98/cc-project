@@ -13,3 +13,8 @@ An overview of the programming language and the interpreter is given in the [doc
 
 ## Abstract syntax tree
 ![Example AST](fblocks_ast.png "AST")
+
+## Example: Recursive fibonacci
+![Example Fibonacci](fblocks_fib.png "Fibonacci")
+
+More scripts are available [here](fblocks/scripts).
